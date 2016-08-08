@@ -1,0 +1,79 @@
+// Java program to print binary tree in vertical order
+
+// A binary tree node
+class Node 
+{
+	int data;
+	Node left, right;
+
+	Node(int item) 
+	{
+		this.data = item;
+		this.left = this.right = null;
+	}
+}
+
+class MinMax{
+    int min, max;
+}
+
+class BinaryTree{
+    Node root;
+    MinMax value = new MinMax();
+    void findMinMax(Node root, MinMax val, int hd)
+    {
+        if(root==null)
+           return;
+        if(hd<val.min)
+           val.min = hd;
+        else if(hd>val.max)
+           val.max = hd;
+        findMinMax(root.left, val, hd-1);
+        findMinMax(root.right, val, hd+1);
+    }
+    
+    void printVerticalOrd(Node root, int lineNo, int hd)
+    {
+        if(root==null)
+           return;
+        if(lineNo==hd)
+           System.out.print(root.data+" ");
+        printVerticalOrd(root.left, lineNo, hd-1);
+        printVerticalOrd(root.right, lineNo, hd+1);
+    }
+    
+    void verticalOrder(Node root)
+    {
+        if(root==null)
+           return;
+        findMinMax(root, value, 0);
+        int lineNo = value.min;
+        for(;lineNo<=value.max;lineNo++)
+        {
+            printVerticalOrd(root, lineNo, 0);
+            System.out.println();
+        }    
+    }
+
+	// Driver program to test the above functions
+	public static void main(String args[]) 
+	{
+		BinaryTree tree = new BinaryTree();
+
+		/* Let us construct the tree shown in above diagram */
+		tree.root = new Node(1);
+		tree.root.left = new Node(2);
+		tree.root.right = new Node(3);
+		tree.root.left.left = new Node(4);
+		tree.root.left.right = new Node(5);
+		tree.root.right.left = new Node(6);
+		tree.root.right.right = new Node(7);
+		tree.root.right.left.right = new Node(8);
+		tree.root.right.right.right = new Node(9);
+
+		System.out.println("vertical order traversal is :");
+		tree.verticalOrder(tree.root);
+	}
+}
+
+
