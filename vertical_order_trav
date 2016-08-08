@@ -1,0 +1,63 @@
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class Node
+{
+    int data;
+    Node left, right;
+    Node(int item)
+    {
+        this.data = item;
+        this.left = this.right = null;
+    }
+}
+
+class BinaryTree
+{
+    //static Node root;
+    TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<Integer, ArrayList<Integer>>();
+    
+    void createTreeMap(Node root, int hd)
+    {
+        if(root==null)
+            return;
+            
+        if(!map.containsKey(hd))
+            map.put(hd, new ArrayList<Integer>());
+         
+        map.get(hd).add(root.data);
+        createTreeMap(root.left, hd-1);
+        createTreeMap(root.right, hd+1);
+    }
+    
+    void verticalOrderTrav(Node root)
+    {
+        createTreeMap(root, 0);
+        for(int i=0;i<map.size();)
+        {
+            ArrayList<Integer> myList = map.get(map.firstKey());
+            System.out.println(myList);
+            map.remove(map.firstKey());
+        }
+    }
+    
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		BinaryTree tree = new BinaryTree();
+
+		Node root = new Node(1);
+		root.left = new Node(2);
+        root.right = new Node(3);
+        root.left.left = new Node(4);
+        root.left.right = new Node(5);
+        root.right.left = new Node(6);
+        root.right.right = new Node(7);
+        root.right.left.right = new Node(8);
+        root.right.right.right = new Node(9);
+  
+        System.out.println("vertical order traversal is :");
+        tree.verticalOrderTrav(root);
+	}
+}
