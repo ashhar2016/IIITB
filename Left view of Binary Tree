@@ -1,0 +1,100 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Node
+{
+    int data;
+    Node left, right;
+    Node(int val)
+    {
+        data = val;
+        left = right = null;
+    }
+}
+class BinaryTree
+{
+    
+    Node root;
+    BinaryTree(Node node)
+    {
+        root = node;
+    }
+    //iterative approach using queue.
+    public void printLeftView()
+    {
+        Queue<Node> q = new LinkedList<>();
+        q.add(root);
+        int count = 0;
+        
+        while(q.isEmpty()==false)
+        {
+            Node node = q.poll();
+            count = q.size();
+            System.out.print(node.data+" ");
+            if(node.left!=null)
+                q.add(node.left);
+            if(node.right!=null)
+                q.add(node.right);
+            while(count-- >0)
+            {
+                node = q.poll();
+                if(node.left!=null)
+                    q.add(node.left);
+                if(node.right!=null)
+                    q.add(node.right);
+            }
+              
+        }
+    }
+    //recursive approach, passing information of level in each recursive call
+    static int currentLevel = -1;  //to identify first element in each level.
+   
+    public void leftView(Node root, int level)
+    {
+        if(root==null)
+            return;
+        if(level > currentLevel)
+        {
+            System.out.print(root.data+" ");
+            currentLevel = level;
+        }    
+        if(root.left!=null)
+            leftView(root.left, level+1);
+        if(root.right!=null)
+            leftView(root.right, level+1);
+    }
+}
+public class Main
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+		Node node = new Node(1);
+	    BinaryTree bt = new BinaryTree(node);
+	    bt.root.left = new Node(2);
+	    bt.root.right = new Node(3);
+	    bt.root.right.left = new Node(4);
+	    bt.root.right.right = new Node(5);
+	    System.out.println("left view of first tree: iterative method");
+		bt.printLeftView();
+		System.out.printf("\n");
+		System.out.println("left view of first tree: recursive method");
+		bt.leftView(bt.root, 0);
+		
+		//another tree
+		Node n = new Node(1);
+		BinaryTree bt1 = new BinaryTree(n);
+		bt1.root.left = new Node(2);
+		bt1.root.right = new Node(3);
+		bt1.root.left.right = new Node(4);
+		bt1.root.left.right.right = new Node(5);
+		bt1.root.left.right.right.right = new Node(6);
+		System.out.printf("\n");
+		System.out.println("left view of second tree");
+		bt1.printLeftView();
+	}
+}
