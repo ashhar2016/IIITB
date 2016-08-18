@@ -1,0 +1,82 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Node{
+    int data;
+    Node left, right;
+    
+    Node(int item)
+    {
+        this.data = item;
+        left = right = null;
+    }
+}
+class Minmax{
+    int min, max;
+}
+
+class Item{
+    Node node;
+    int hd;  //horizontal distance
+    
+    Item(Node root, int x)
+    {
+       node = root;
+       hd = x;
+    }   
+}
+
+class BinaryTree
+{
+    Node root;
+    
+    public void printTopView()
+    {
+        /*need queue to for level order traversal so that top elements of any horizontal distance
+          apper before other elements of that same HD*/
+        Queue<Item> que = new LinkedList<Item>();
+        //set to store hd. It is used to check if the node is first one belonging to this HD.
+        Set<Integer> set = new HashSet<Integer>();
+        
+        if(root==null)
+           return;
+        
+        que.add(new Item(root, 0));
+        
+        while(que.size()!=0)
+        {
+            Item item = que.poll();
+            Node x = item.node;
+            int hd = item.hd;
+            
+            if(x.left!=null)
+                que.add(new Item(x.left, hd-1));
+            if(x.right!=null)
+                que.add(new Item(x.right, hd+1));
+            
+            if(set.contains(hd)==false)
+            {
+                set.add(hd);
+                System.out.print(x.data+" ");
+            }
+        }
+    }
+
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+	    
+		BinaryTree bt = new BinaryTree();
+		bt.root = new Node(1); 
+		bt.root.left = new Node(2);
+		bt.root.right = new Node(3);
+		bt.root.left.right = new Node(4);
+		bt.root.left.right.right = new Node(5);
+		bt.root.left.right.right.right = new Node(6);
+		bt.printTopView();
+	}
+}
