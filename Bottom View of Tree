@@ -1,0 +1,148 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Node
+{
+    int data;
+    Node left, right;
+    Node(int x)
+    {
+        data = x;
+        left = right = null;
+    }
+}
+class Item
+{
+    Node node;
+    int hd;
+    Item(Node n, int x)
+    {
+        this.node = n;
+        this.hd = x;
+    }
+}
+
+class BinaryTree
+{
+    Node root;
+    
+    void printBottomView()
+    {
+        //queue for level order traversal.
+        Queue<Item> q = new LinkedList<Item>();
+        
+        /*ArrayList - first element of arraylist holds level of all the nodes currently in it.
+          it is used to print all nodes belonging to same HD and same level visible from bottom(view).
+          If multiple nodes are at same level and same HD they will be stored in arraylist.
+          Using TreeMap to store Arraylist of nodes with HD as key. Treemap maintains key value pair 
+          in sorted order, sorted on key*/
+        
+        TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<Integer, ArrayList<Integer>>();
+        q.add(new Item(root, 0));
+        int level = 0;
+
+        while(q.isEmpty()==false)
+        {
+            int count = q.size();
+            while(count-- >0)
+            {
+                Item i = q.poll();
+                Node node = i.node;
+                int hd = i.hd;
+                ArrayList<Integer> list;
+                if(map.containsKey(hd))
+                {
+                    list = map.get(hd);
+                    int prevLevel = list.get(0);
+                    /*comparing level of current node with level of nodes already in List whose HD equals
+                      HD of current node*/
+                    if(prevLevel != level)
+                    {
+                        /*removing older nodes from arraylist if new nodes of same HD but belonging to
+                          next level are found, remove the entire arraylist. Make a new arraylist
+                          to hold nodes of current level*/
+                          
+                        map.remove(hd);
+                        list = new ArrayList<Integer>();
+                        list.add(0, level); //first element of list holds level of nodes.
+                    }
+                    list.add(node.data);
+                    map.put(hd, list);
+                }    
+                else
+                {
+                    list = new ArrayList<Integer>();
+                    list.add(0, level);
+                    list.add(node.data);
+                    map.put(hd, list);
+                }    
+                if(node.left!=null)
+                    q.add(new Item(node.left, hd-1));
+                if(node.right!=null)
+                    q.add(new Item(node.right, hd+1));
+                //System.out.print("Data: "+node.data+" HD: "+hd+"  ");    
+            }      
+            level++; //next level in level order traversal.
+            //System.out.println();
+            //System.out.println("level: "+level);
+        }
+        
+        while(map.size()!=0)
+        {
+            Map.Entry<Integer, ArrayList<Integer>> entry = map.firstEntry();
+            ArrayList<Integer> list = entry.getValue();
+            for(int i=1;i<list.size();i++)
+                System.out.print(list.get(i)+" ");
+            map.remove(entry.getKey());
+        }
+        System.out.printf("\n");
+    }
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+	   BinaryTree bt = new BinaryTree();
+	    bt.root = new Node(20);
+	    bt.root.left = new Node(8);
+	    bt.root.right = new Node(22);
+	    bt.root.left.left = new Node(5);
+	    bt.root.left.right = new Node(3);
+	    bt.root.left.right.left = new Node(10);
+	    bt.root.left.right.right = new Node(14);
+	    bt.root.right.right = new Node(25);
+	    bt.printBottomView();
+	    
+	    BinaryTree bt1 = new BinaryTree();
+	    bt1.root = new Node(20);
+	    bt1.root.left = new Node(8);
+	    bt1.root.right = new Node(22);
+	    bt1.root.left.left = new Node(5);
+	    bt1.root.left.right = new Node(3);
+	    bt1.root.left.right.left = new Node(10);
+	    bt1.root.left.right.right = new Node(14);
+	    bt1.root.right.left = new Node(4);
+	    bt1.root.right.right = new Node(25);
+	    bt1.printBottomView();
+	    
+	    BinaryTree bt2 = new BinaryTree();
+	    bt2.root = new Node(1);
+	    bt2.root.left = new Node(2);
+	    bt2.root.right = new Node(3);
+	    bt2.root.left.left = new Node(4);
+	    bt2.root.left.right = new Node(5);
+	    bt2.root.right.left = new Node(6);
+	    bt2.root.right.right = new Node(7);
+	    bt2.root.left.left.left = new Node(8);
+	    bt2.root.left.left.right = new Node(9);
+	    bt2.root.left.right.left = new Node(10);
+	    bt2.root.left.right.right = new Node(11);
+	    bt2.root.right.left.left = new Node(12);
+	    bt2.root.right.left.right = new Node(13);
+	    bt2.root.right.right.left = new Node(14);
+	    bt2.root.right.right.right = new Node(15);
+	    bt2.printBottomView();
+	}
+}
