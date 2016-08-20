@@ -1,0 +1,106 @@
+/* package codechef; // don't place package name! */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+/* Name of the class has to be "Main" only if the class is public. */
+class Node
+{
+    int data;
+    Node left, right;
+    
+    Node(int x)
+    {
+        this.data = x;
+        left = right = null;
+    }
+}
+class Item
+{
+    Node node;
+    int vd;
+    Item(Node n, int x)
+    {
+        this.node = n;
+        this.vd = x;
+    }
+}
+class BinaryTree
+{
+    Node root;
+
+    void diagonalTraversal()
+    {
+        /*Queue to hold left child of each node while traversing diagonally i.e., while
+          right child is not null. left child is given vertical distance (VD) one larger
+          than the VD of current node.
+          creating treemap to hold arraylist of nodes in the same diagonal with vd as key.*/
+        Queue<Item> q = new LinkedList<Item>();
+        TreeMap<Integer, ArrayList<Node>> map = new TreeMap<>(); 
+        q.add(new Item(root, 0));
+        
+        while(q.isEmpty()==false)
+        {
+            Item i = q.poll();
+            Node cur = i.node;
+            ArrayList<Node> list;
+            int vd = i.vd;
+            while(cur!=null)
+            {
+                if(map.containsKey(vd))
+                    list = map.get(vd);
+                else
+                    list = new ArrayList<Node>();
+                list.add(cur);
+                map.put(vd, list);
+                //if left child is not null insert it on queue with vd one larger than current vd.
+                if(cur.left!=null)
+                    q.add(new Item(cur.left, vd+1));
+                cur = cur.right;    
+            }
+        }
+        while(map.size()!=0)
+        {
+            Map.Entry<Integer, ArrayList<Node>> entry = map.firstEntry();
+            ArrayList<Node> list = entry.getValue();
+            for(Node node : list)
+                System.out.print(node.data+" ");
+            map.remove(entry.getKey());    
+            System.out.printf("\n");    
+        }
+        System.out.println();
+    }
+}   
+class Solution
+{
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		// your code goes here
+		BinaryTree bt = new BinaryTree();
+		bt.root = new Node(8);
+		bt.root.left = new Node(3);
+		bt.root.right = new Node(10);
+		bt.root.left.left = new Node(1);
+		bt.root.left.right = new Node(6);
+		bt.root.left.right.left = new Node(4);
+		bt.root.left.right.right = new Node(7);
+		bt.root.right.right = new Node(14);
+		bt.root.right.left = new Node(13);
+		bt.diagonalTraversal();
+		
+		BinaryTree bt1 = new BinaryTree();
+		bt1.root = new Node(1);
+		bt1.root.left = new Node(2);
+        bt1.root.right = new Node(3);
+        bt1.root.left.left = new Node(9);
+        bt1.root.left.right = new Node(6);
+        bt1.root.right.left = new Node(4);
+        bt1.root.right.right = new Node(5);
+        bt1.root.right.left.left = new Node(12);
+        bt1.root.right.left.right = new Node(7);
+        bt1.root.left.right.left = new Node(11);
+        bt1.root.left.left.right = new Node(10);
+        bt1.diagonalTraversal();
+	}
+}
