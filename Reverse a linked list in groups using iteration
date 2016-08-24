@@ -1,0 +1,78 @@
+/* package codechef; // don't place package name! */
+/*Reverse a linked list in groups of given size using iteration.*/
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+
+class Node
+{
+    int data;
+    Node next;
+    Node(int x)
+    {
+        this.data = x;
+        this.next = null;
+    }
+}
+class Solution
+{
+    public static Node reverse(Node head, int k)
+    {
+        int i = 0;
+        Node cur = head;
+        Node prev = null;
+        Node next = null;
+        Node newHead = null;
+        /*run loop for first k times to get the head of new Linked list that we will get 
+        after reversal.*/
+        while(i<k)
+        {
+            next = cur.next;
+            cur.next = prev;
+            prev = cur;
+            cur = next;
+            i++;
+        }
+        newHead = prev;  // new head of new linked list.
+        while(cur!=null)
+        {
+            i = 0;
+            Node head1 = cur; //head1 holds first node of the current sublist.
+            prev = null;
+            while(i<k && cur!=null)
+            {
+                next = cur.next;
+                cur.next = prev;
+                prev = cur;
+                cur = next;
+                i++;
+            }
+            head.next = prev;//head holds last element of previous sublist.
+            /*Now perform linking of previous sublist to current sublist by: 
+            last element of previous sublist --> first element of current sublist.*/
+            head = head1;
+        }
+        return newHead;
+    }
+    
+	public static void main (String[] args) throws java.lang.Exception
+	{
+		Node head = new Node(1);
+		head.next = new Node(2);
+		head.next.next = new Node(3);
+		head.next.next.next = new Node(4);
+		head.next.next.next.next = new Node(5);
+		head.next.next.next.next.next = new Node(6);
+		head.next.next.next.next.next.next = new Node(7);
+		head.next.next.next.next.next.next.next= new Node(8);
+		head.next.next.next.next.next.next.next.next = new Node(9);
+		head = reverse(head, 4);
+		Node cur = head;
+		while(cur!=null)
+		{
+		    System.out.print(cur.data+" ");
+		    cur = cur.next;
+		}
+	}
+}
